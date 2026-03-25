@@ -1,25 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+type Message = {
+  role: "user" | "ai";
+  content: string;
+  cta?: boolean;
+};
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showHint, setShowHint] = useState(false);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
 
-  // 🔔 Bulle d'attention
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isOpen) setShowHint(true);
-    }, 5000);
+  const chatRef = useRef<HTMLDivElement>(null);
 
-    return () => clearTimeout(timer);
-  }, [isOpen]);
+  // 🎯 Questions spirituelles
+  const quickQuestions = [
+    "✨ Qu’est-ce que l’âme divine ?",
+    "🧘 Comment se connecter à son âme ?",
+    "🔥 Comment dévoiler les richesses cachées dans son âme ?",
+    "📅 Quelle est la date et le lieu de l’évènement ?",
+  ];
 
-  // 🙏 Message automatique
+  // 👋 Message immersif
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       setTimeout(() => {
@@ -27,210 +32,161 @@ export default function ChatBot() {
           {
             role: "ai",
             content:
-              "🙏 Shalom ! Bienvenue à la conférence du Grand Rabbin AVRAHAM MESSAN KOUDOSSOU. Comment puis-je vous aider ?",
+              "🙏 Shalom…\n\nCe n’est pas un hasard si tu es ici.\n\nChaque âme cherche une lumière.\n\nJe suis là pour t’accompagner… Que veux-tu découvrir ?",
           },
         ]);
       }, 500);
     }
   }, [isOpen]);
 
-  // 🧠 Détection intelligente inscription
+  // 📜 Scroll auto
+  useEffect(() => {
+    chatRef.current?.scrollTo({
+      top: chatRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, loading]);
+
+  // 🧠 Détection inscription
   const wantsToRegister = (text: string) => {
     const msg = text.toLowerCase();
 
-    const keywords = [
-      "inscription",
-      "inscrire",
-      "m'inscrire",
-      "sinscrire",
-      "s'inscrire",
-      "inscrit",
-      "participer",
-      "réserver",
-      "reserver",
-      "venir",
-      "place",
-      "ticket",
-      "billet",
-      "assister",
-    ];
-
-    const typos = [
-      "insciption",
-      "inscrption",
-      "insription",
-      "insrire",
-      "inscire",
-      "inscriree",
-      "inscrir",
-      "incription",
-      "inscriotion",
-      "sinscription",
-      "sincrire",
-      "sincire",
-    ];
-
-    const natural = [
-      "je veux venir",
-      "je veux participer",
-      "je peux venir",
-      "je peux participer",
-      "je suis intéressé",
-      "ça m'intéresse",
-      "comment faire",
-      "comment réserver",
-      "je veux m'inscrire",
-    ];
-
-    const found =
-      keywords.some((k) => msg.includes(k)) ||
-      typos.some((k) => msg.includes(k)) ||
-      natural.some((k) => msg.includes(k));
-
-    const fuzzy =
-      msg.includes("insc") ||
-      msg.includes("partic") ||
-      msg.includes("reser");
-
-    return found || fuzzy;
+    return (
+      ["inscription", "participer", "réserver", "venir"].some((k) =>
+        msg.includes(k)
+      ) || msg.includes("insc")
+    );
   };
 
-  // 📊 TRACK CLICK
-  const handleClick = () => {
-    setClickCount((prev) => prev + 1);
-    console.log("Nombre de clics inscription :", clickCount + 1);
-  };
+  // 🚀 Envoi message
+  const sendMessage = async (customMessage?: string) => {
+    const userMsg = customMessage || message;
 
-  const sendMessage = async () => {
-    if (!message) return;
+    if (!userMsg.trim() || loading) return;
 
     setLoading(true);
-
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      body: JSON.stringify({ message }),
-    });
-
-    const data = await res.json();
-
-    const showCTA = wantsToRegister(message);
+    setMessage("");
 
     setMessages((prev) => [
       ...prev,
-      { role: "user", content: message },
-      {
-        role: "ai",
-        content: data.reply,
-        cta: showCTA,
-      },
+      { role: "user", content: userMsg },
     ]);
 
-    setMessage("");
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userMsg }),
+      });
+
+      const data = await res.json();
+
+      const showCTA = wantsToRegister(userMsg);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          content: data.reply,
+          cta: showCTA,
+        },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          content: "❌ Une erreur est survenue.",
+        },
+      ]);
+    }
+
     setLoading(false);
   };
 
   return (
     <>
-      {/* 💬 BOUTON FLOTTANT */}
+      {/* 🔘 Bouton */}
       {!isOpen && (
-        <div className="fixed bottom-5 right-5 flex flex-col items-end gap-2">
-
-          {showHint && (
-            <div className="bg-white text-black text-sm px-4 py-2 rounded-xl shadow-lg animate-bounce">
-              👋 Besoin d’infos sur la conférence ?
-            </div>
-          )}
-
+        <div className="fixed bottom-5 right-5">
           <button
-            onClick={() => {
-              setIsOpen(true);
-              setShowHint(false);
-            }}
-            className="bg-purple-600 text-white p-4 rounded-full shadow-xl hover:scale-110 transition relative"
+            onClick={() => setIsOpen(true)}
+            className="bg-purple-600 text-white px-4 py-3 rounded-full shadow-xl flex items-center gap-2"
           >
-            💬
-            <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
+            🤖 <span>Besoin de l’IA</span>
           </button>
         </div>
       )}
 
-      {/* 💬 CHATBOX */}
+      {/* 💬 Chat */}
       {isOpen && (
-        <div className="fixed bottom-5 right-5 w-80 bg-zinc-900 p-4 rounded-2xl shadow-xl border border-zinc-800">
+        <div className="fixed bottom-5 right-5 w-80 bg-gradient-to-br from-zinc-900 to-purple-900 p-4 rounded-2xl shadow-xl">
 
-          {/* HEADER */}
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-white font-semibold">
-              Assistant IA
-            </h3>
-
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-gray-400 hover:text-white"
-            >
-              ✖
-            </button>
+          <div className="flex justify-between mb-3">
+            <h3 className="text-white">Assistant spirituel</h3>
+            <button onClick={() => setIsOpen(false)}>✖</button>
           </div>
 
-          {/* MESSAGES */}
-          <div className="h-60 overflow-y-auto mb-3 space-y-3">
+          <div ref={chatRef} className="h-60 overflow-y-auto space-y-3">
             {messages.map((m, i) => (
-              <div key={i} className="flex flex-col">
+              <div key={i}>
+                <div className="text-xs text-gray-400">
+                  {m.role === "user" ? "Toi" : "Guide"}
+                </div>
 
-                <span className="text-xs text-gray-500 mb-1">
-                  {m.role === "user" ? "Toi" : "IA"}
-                </span>
-
-                <div
-                  className={`p-2 rounded-lg text-sm ${
-                    m.role === "user"
-                      ? "bg-purple-600 text-white self-end"
-                      : "bg-zinc-800 text-white self-start"
-                  }`}
-                >
+                <div className="bg-zinc-800 text-white p-2 rounded text-sm">
                   {m.content}
 
-                  {/* 🎟 BOUTON INSCRIPTION */}
                   {m.cta && (
                     <a
                       href="https://forms.gle/TLrMdkNxnTq9Z3Jg7"
                       target="_blank"
-                      onClick={handleClick}
-                      className="block mt-3 text-center bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
+                      className="block mt-2 bg-purple-600 p-2 text-center rounded"
                     >
-                      🎟 S’inscrire maintenant
+                      🎟 S’inscrire
                     </a>
                   )}
                 </div>
-
               </div>
             ))}
 
             {loading && (
-              <p className="text-sm text-gray-400 animate-pulse">
-                IA écrit...
-              </p>
+              <div className="text-gray-400 animate-pulse">
+                ✨ Une réponse se révèle...
+              </div>
             )}
           </div>
 
-          {/* INPUT */}
+          {/* Questions */}
+          {messages.length <= 1 && (
+            <div className="grid gap-2 mt-2">
+              {quickQuestions.map((q, i) => (
+                <button
+                  key={i}
+                  onClick={() => sendMessage(q)}
+                  className="bg-zinc-800 text-white p-2 rounded text-sm hover:bg-purple-600"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          )}
+
           <input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Pose ta question..."
-            className="w-full p-3 rounded-xl bg-white text-black 
-                       placeholder-gray-400 outline-none
-                       focus:ring-2 focus:ring-purple-500"
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            className="w-full mt-2 p-2 rounded text-black"
           />
 
-          {/* BOUTON ENVOYER */}
           <button
-            onClick={sendMessage}
-            className="mt-2 w-full bg-purple-600 p-2 rounded-xl hover:bg-purple-700 transition text-white font-semibold"
+            onClick={() => sendMessage()}
+            className="w-full mt-2 bg-purple-600 p-2 text-white rounded"
           >
             Envoyer
           </button>
-
         </div>
       )}
     </>

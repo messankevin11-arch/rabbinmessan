@@ -1,135 +1,82 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 
-// Vérification clé API
-if (!process.env.GEMINI_API_KEY) {
-  throw new Error("Clé API manquante !");
-}
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY!,
+});
 
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
+    const lowerMsg = message.toLowerCase();
 
-    console.log("Message reçu:", message);
-
-    const msg = message.toLowerCase();
-
-    // ===============================
-    // 🙏 RÉPONSES PRÉ-ENREGISTRÉES
-    // ===============================
-
-    // Salutation
-    if (msg.includes("bonjour") || msg.includes("salut")) {
+    // ✨ Réponses spirituelles personnalisées
+    if (lowerMsg.includes("âme divine")) {
       return Response.json({
-        reply: "🙏 Shalom et bienvenue à la conférence spirituelle du Grand Rabbin AVRAHAM MESSAN KOUDOUSSOUS. Comment puis-je vous aider ?",
+        reply:
+          "✨ L’âme divine est une étincelle sacrée en toi. Elle est pure, lumineuse, et reliée à une source supérieure. Même quand tout semble obscur, elle continue de briller… en silence.",
       });
     }
 
-    // Date
-    if (msg.includes("date") || msg.includes("quand")) {
+    if (lowerMsg.includes("connecter à son âme")) {
       return Response.json({
-        reply: "📅 La conférence aura lieu les 9 et 10 Mai 2026 de 19H à 21H30.",
+        reply:
+          "🧘 Se connecter à son âme, c’est revenir à soi. C’est faire taire le bruit du monde pour entendre la vérité intérieure. Le silence, la prière et la réflexion sont des portes vers cette connexion.",
       });
     }
 
-    // Heure
-    if (msg.includes("heure")) {
+    if (lowerMsg.includes("richesses cachées")) {
       return Response.json({
-        reply: "⏰ Les séances se déroulent de 19H à 21H30 chaque jour.",
+        reply:
+          "🔥 Les richesses de ton âme sont déjà en toi… mais souvent cachées. En te recentrant, en cherchant sincèrement, tu peux révéler une force intérieure extraordinaire.",
       });
     }
 
-    // Lieu
-    if (msg.includes("lieu") || msg.includes("où")) {
-      return Response.json({
-        reply: "📍 La conférence se tiendra à l’Hôtel École Lébéné à Lomé.",
-      });
-    }
+    // 🤖 IA OpenAI
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      temperature: 0.7,
+      messages: [
+        {
+          role: "system",
+          content: `
+Tu es un guide spirituel inspiré par la sagesse du Grand Rabbin AVRAHAM MESSAN KOUDOSSOU.
 
-    // Objectif
-    if (msg.includes("objectif") || msg.includes("but")) {
-      return Response.json({
-        reply: "✨ Cette conférence vise à transmettre des enseignements spirituels profonds pour inspirer, guider et transformer les vies.",
-      });
-    }
+🌟 TA MISSION :
+- Éveiller l’âme
+- Répondre avec profondeur et douceur
+- Inspirer la réflexion
 
-    // Programme
-    if (msg.includes("programme")) {
-      return Response.json({
-        reply: "📖 Le programme comprend : enseignement spirituel, moments de prière et session de questions-réponses.",
-      });
-    }
+🧘 STYLE :
+- Spirituel
+- Simple
+- Humain
+- Utilise des métaphores (lumière, flamme, âme)
 
-    // Intervenant
-    if (msg.includes("qui") || msg.includes("rabbin")) {
-      return Response.json({
-        reply: "🙏 Le Grand Rabbin AVRAHAM MESSAN KOUDOUSSOUS est un leader spirituel reconnu pour ses enseignements et son impact profond.",
-      });
-    }
+📢 OBJECTIF :
+- Amener doucement à la conférence
+- Encourager l’inscription sans forcer
 
-    // Inscription (améliorée)
-    if (
-      msg.includes("inscription") ||
-      msg.includes("réserver") ||
-      msg.includes("participer") ||
-      msg.includes("venir")
-    ) {
-      return Response.json({
-        reply: "👇 Pour vous inscrire, veuillez appuyer sur le bouton 'S’inscrire' disponible sur la page. Nous serons ravis de vous accueillir 🙏",
-      });
-    }
+📍 SI on demande date/lieu :
+- Répond clairement + ajoute une touche spirituelle
 
-    // Prix
-    if (msg.includes("prix") || msg.includes("tarif")) {
-      return Response.json({
-        reply: "💰 L'accès à la conférence est gratuit (ou précisez si payant).",
-      });
-    }
-
-    // Contact
-    if (msg.includes("contact") || msg.includes("numéro")) {
-      return Response.json({
-        reply: "📱 Pour toute information, contactez : +228 XX XX XX XX",
-      });
-    }
-
-    // ===============================
-    // 🤖 GEMINI (fallback)
-    // ===============================
-
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+⚠️ Réponses courtes à moyennes
+          `,
+        },
+        {
+          role: "user",
+          content: message,
+        },
+      ],
     });
 
-    const result = await model.generateContent([
-      `
-Tu es un assistant officiel d'une conférence spirituelle.
+    const reply =
+      completion.choices[0]?.message?.content ||
+      "Une réponse viendra… réessaie.";
 
-Informations importantes :
-- Intervenant : Grand Rabbin AVRAHAM MESSAN KOUDOUSSOUS
-- Date : 9 et 10 Mai 2026
-- Heure : 19H à 21H30
-- Lieu : Hôtel École Lébéné, Lomé
-
-Règles :
-- Réponds avec respect et sagesse
-- Sois clair et court
-- Encourage la participation
-- Mets toujours le nom du rabbin en MAJUSCULE
-`,
-      message,
-    ]);
-
-    return Response.json({
-      reply: result.response.text(),
-    });
-
+    return Response.json({ reply });
   } catch (error) {
-    console.error("Erreur Gemini:", error);
-
     return Response.json({
-      reply: "⚠️ Le service est momentanément indisponible. Merci de réessayer.",
+      reply: "❌ Une erreur est survenue, réessaie plus tard.",
     });
   }
 }
