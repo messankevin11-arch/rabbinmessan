@@ -18,15 +18,14 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen text-white bg-gradient-to-br from-black via-zinc-900 to-black">
+    <main className="min-h-screen text-gray-900 bg-gradient-to-br from-sky-100 via-blue-200 to-blue-400">
 
       {/* HERO */}
-      <section className="h-screen flex flex-col justify-center items-center text-center px-6 relative border-b border-white/10 overflow-hidden">
+      <section className="h-screen flex flex-col justify-center items-center text-center px-6 relative border-b border-blue-200 overflow-hidden">
 
-        {/* 🔝 HEADER FLOATING */}
+        {/* 🔝 HEADER */}
         <div className="absolute top-6 left-6 right-6 flex justify-between items-center z-20">
 
-          {/* 🔵 BOUTON INSCRIPTION (REMPLACE FACEBOOK) */}
           <a 
             href="https://forms.gle/TLrMdkNxnTq9Z3Jg7"
             target="_blank"
@@ -37,7 +36,6 @@ export default function Home() {
             🎟 S'inscrire
           </a>
 
-          {/* 💬 WHATSAPP */}
           <a
             href="https://wa.me/22893669121"
             target="_blank"
@@ -51,63 +49,71 @@ export default function Home() {
 
         </div>
 
+        {/* 🧿 LOGO */}
+        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-20">
+          <img
+            src="/B.jpeg"
+            alt="Logo"
+            className="h-16 md:h-20 object-contain drop-shadow-lg"
+          />
+        </div>
+
         {/* IMAGE */}
         <div className="absolute inset-0 -z-20">
           <img
-            src="/bg-conference.jpg"
+            src="/header.png"
             alt="Conférence"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-30"
           />
         </div>
 
         {/* OVERLAY */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90 -z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-200/80 via-blue-300/60 to-blue-400/90 -z-10"></div>
 
         {/* GLOW */}
-        <div className="absolute w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute w-[500px] h-[500px] bg-white/30 rounded-full blur-3xl"></div>
 
         {/* TITRE */}
         <motion.h1 
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-4xl md:text-6xl font-bold uppercase tracking-wide
-                     bg-gradient-to-r from-purple-300 via-pink-300 to-blue-300
-                     bg-clip-text text-transparent
-                     drop-shadow-[0_0_10px_rgba(168,85,247,0.3)]"
+                     bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-500
+                     bg-clip-text text-transparent"
         >
           DÉVOILEMENT DE L’ÂME
         </motion.h1>
 
-        <p className="mt-4 text-gray-200 max-w-xl">
-          Une rencontre exceptionnelle avec le Grand Rabbin 
-          <span className="text-white font-semibold"> AVRAHAM MESSAN KOUDOSSOU</span>
+        {/* TEXTE */}
+        <p className="mt-4 text-gray-700 max-w-xl">
+          Une rencontre exceptionnelle avec le  
+          <span className="text-blue-900 font-semibold"> Grand Rabbin AVRAHAM MESSAN KOUDOSSOU</span>
         </p>
 
-        <p className="mt-3 text-sm text-gray-300">
+        {/* INFOS */}
+        <p className="mt-3 text-sm text-gray-800">
           📅 9 ET 10 MAI 2026 <br />
           ⏰ 19H À 21H30 <br />
           📍 Hôtel École Lébéné, Lomé
         </p>
 
         {/* COMPTEUR */}
-        <div className="mt-4 px-6 py-2 bg-red-600/20 border border-red-500 rounded-xl text-red-400 font-semibold animate-pulse">
+        <div className="mt-4 px-6 py-2 bg-red-100 border border-red-400 rounded-xl text-red-600 font-semibold animate-pulse">
           Plus que {places} places disponibles !
         </div>
 
-        {/* BOUTON BLANC */}
-       
       </section>
 
       {/* CONFÉRENCIER */}
-      <section className="py-24 px-6 text-center relative border-b border-white/10">
+      <section className="py-24 px-6 text-center border-b border-blue-200 bg-white/40 backdrop-blur-md">
 
-        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent backdrop-blur-sm -z-10"></div>
-
-        <h2 className="text-3xl font-bold mb-12">Le Conférencier</h2>
+        <h2 className="text-3xl font-bold mb-12 text-blue-900">
+          Le Conférencier
+        </h2>
 
         <div className="flex flex-col items-center">
 
-          <div className="w-44 h-44 rounded-full mb-6 overflow-hidden border border-white/20 shadow-xl">
+          <div className="w-44 h-44 rounded-full mb-6 overflow-hidden border border-blue-300 shadow-xl">
             <img 
               src="/A.jpeg"
               alt="AVRAHAM MESSAN KOUDOSSOU"
@@ -115,11 +121,11 @@ export default function Home() {
             />
           </div>
 
-          <h3 className="text-xl font-semibold mb-3">
+          <h3 className="text-xl font-semibold mb-3 text-blue-900">
             AVRAHAM MESSAN KOUDOSSOU
           </h3>
 
-          <p className="text-gray-400 max-w-xl leading-relaxed mb-6">
+          <p className="text-gray-700 max-w-xl leading-relaxed mb-6">
             Leader spirituel reconnu, il partage des enseignements puissants 
             pour inspirer, guider et transformer les vies.
           </p>
@@ -128,32 +134,30 @@ export default function Home() {
             href="/references-rabbin.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-3 rounded-xl border border-purple-400/30 
-                       bg-gradient-to-r from-purple-500/10 to-blue-500/10
-                       hover:from-purple-500/20 hover:to-blue-500/20
-                       transition shadow-lg"
+            className="px-8 py-3 rounded-xl border border-blue-300 
+                       bg-blue-100 hover:bg-blue-200 transition shadow-lg"
           >
-            📖 Télécharger les références du Rabbin
+            📖 Télécharger les références
           </a>
 
         </div>
       </section>
 
-      {/* ACCÈS COURS */}
-      <section className="py-24 px-6 text-center border-b border-white/10 bg-gradient-to-b from-zinc-900 to-black">
+      {/* COURS */}
+      <section className="py-24 px-6 text-center border-b border-blue-200 bg-gradient-to-b from-blue-200 to-blue-300">
 
-        <h2 className="text-3xl font-bold mb-6">
+        <h2 className="text-3xl font-bold mb-6 text-blue-900">
           📚 Enseignements du Rabbin
         </h2>
 
-        <p className="text-gray-400 mb-8">
-          Accédez aux cours et enseignements spirituels complets
+        <p className="text-gray-800 mb-8">
+          Accédez aux enseignements spirituels complets
         </p>
 
         <a
           href="/cours"
-          className="px-10 py-4 bg-purple-600 text-white rounded-xl font-semibold 
-                     hover:bg-purple-700 hover:scale-105 transition shadow-lg"
+          className="px-10 py-4 bg-blue-600 text-white rounded-xl font-semibold 
+                     hover:bg-blue-700 hover:scale-105 transition shadow-lg"
         >
           Voir les cours
         </a>
@@ -161,9 +165,9 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 text-center">
+      <section className="py-24 text-center bg-white/50">
 
-        <h2 className="text-3xl font-bold mb-6">
+        <h2 className="text-3xl font-bold mb-6 text-blue-900">
           Réserve ta place maintenant
         </h2>
 
@@ -171,8 +175,8 @@ export default function Home() {
           href="https://forms.gle/TLrMdkNxnTq9Z3Jg7"
           target="_blank"
           rel="noopener noreferrer"
-          className="px-10 py-4 bg-purple-600 text-white rounded-xl font-semibold 
-                     hover:bg-purple-700 hover:scale-105 transition shadow-lg"
+          className="px-10 py-4 bg-blue-600 text-white rounded-xl font-semibold 
+                     hover:bg-blue-700 hover:scale-105 transition shadow-lg"
         >
           🎟 Je m’inscris
         </a>
@@ -181,7 +185,7 @@ export default function Home() {
 
       <ChatBot />
 
-      <footer className="py-10 text-center text-gray-500 text-sm border-t border-white/10">
+      <footer className="py-10 text-center text-gray-600 text-sm border-t border-blue-200">
         © 2026 Conférence Spirituelle - Tous droits réservés
       </footer>
 

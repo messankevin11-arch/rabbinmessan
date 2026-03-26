@@ -8,6 +8,45 @@ export async function POST(req: Request) {
   try {
     const { message } = await req.json();
     const lowerMsg = message.toLowerCase();
+    // 👋 SALUTATIONS NATURELLES
+if (
+  lowerMsg.includes("bonjour") ||
+  lowerMsg.includes("bonsoir") ||
+  lowerMsg.includes("salut") ||
+  lowerMsg.includes("cc") ||
+  lowerMsg.includes("coucou")
+) {
+  return Response.json({
+    reply: `🙏 Shalom…
+
+Je vais très bien, merci 😊  
+Et toi, comment te sens-tu aujourd’hui ?
+
+📅 La conférence aura lieu les 9 et 10 mai 2026  
+⏰ De 19h à 21h30  
+📍 Hôtel École Lébéné, Lomé  
+
+✨ Ce n’est peut-être pas un hasard si tu es ici…`,
+  });
+}
+
+// 😊 "ça va"
+if (
+  lowerMsg.includes("ça va") ||
+  lowerMsg.includes("ca va") ||
+  lowerMsg.includes("tu vas bien") ||
+  lowerMsg.includes("comment vas-tu")
+) {
+  return Response.json({
+    reply: `😊 Oui, je vais bien… merci de demander.
+
+Mais ce qui compte vraiment… c’est toi.
+
+💭 Dis-moi, qu’est-ce que ton cœur cherche en ce moment ?
+
+✨ Peut-être trouveras-tu une réponse lors de cette rencontre du 9 et 10 mai 2026…`,
+  });
+}
 
     // ✨ Réponses spirituelles personnalisées
     if (lowerMsg.includes("âme divine")) {

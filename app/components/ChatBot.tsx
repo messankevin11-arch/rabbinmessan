@@ -18,10 +18,10 @@ export default function ChatBot() {
 
   // 🎯 Questions spirituelles
   const quickQuestions = [
-    "✨ Qu’est-ce que l’âme divine ?",
-    "🧘 Comment se connecter à son âme ?",
-    "🔥 Comment dévoiler les richesses cachées dans son âme ?",
-    "📅 Quelle est la date et le lieu de l’évènement ?",
+    " Qu’est-ce que l’âme divine ?",
+    " Comment se connecter à son âme ?",
+    " Comment dévoiler les richesses cachées dans son âme ?",
+    " Quelle est la date et le lieu de l’évènement ?",
   ];
 
   // 👋 Message immersif
@@ -113,7 +113,7 @@ export default function ChatBot() {
         <div className="fixed bottom-5 right-5">
           <button
             onClick={() => setIsOpen(true)}
-            className="bg-purple-600 text-white px-4 py-3 rounded-full shadow-xl flex items-center gap-2"
+            className="bg-blue-600 text-white px-4 py-3 rounded-full shadow-xl flex items-center gap-2 hover:bg-blue-700 transition"
           >
             🤖 <span>Besoin de l’IA</span>
           </button>
@@ -122,28 +122,28 @@ export default function ChatBot() {
 
       {/* 💬 Chat */}
       {isOpen && (
-        <div className="fixed bottom-5 right-5 w-80 bg-gradient-to-br from-zinc-900 to-purple-900 p-4 rounded-2xl shadow-xl">
+        <div className="fixed bottom-5 right-5 w-80 bg-gradient-to-br from-blue-900 to-sky-700 p-4 rounded-2xl shadow-xl border border-blue-400/30">
 
           <div className="flex justify-between mb-3">
-            <h3 className="text-white">Assistant spirituel</h3>
-            <button onClick={() => setIsOpen(false)}>✖</button>
+            <h3 className="text-white font-semibold">Assistant spirituel</h3>
+            <button className="text-white" onClick={() => setIsOpen(false)}>✖</button>
           </div>
 
-          <div ref={chatRef} className="h-60 overflow-y-auto space-y-3">
+          <div ref={chatRef} className="h-60 overflow-y-auto space-y-3 pr-1">
             {messages.map((m, i) => (
               <div key={i}>
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-blue-200">
                   {m.role === "user" ? "Toi" : "Guide"}
                 </div>
 
-                <div className="bg-zinc-800 text-white p-2 rounded text-sm">
+                <div className="bg-white/10 backdrop-blur-md text-white p-2 rounded text-sm border border-white/10">
                   {m.content}
 
                   {m.cta && (
                     <a
                       href="https://forms.gle/TLrMdkNxnTq9Z3Jg7"
                       target="_blank"
-                      className="block mt-2 bg-purple-600 p-2 text-center rounded"
+                      className="block mt-2 bg-blue-600 p-2 text-center rounded hover:bg-blue-700 transition"
                     >
                       🎟 S’inscrire
                     </a>
@@ -153,7 +153,7 @@ export default function ChatBot() {
             ))}
 
             {loading && (
-              <div className="text-gray-400 animate-pulse">
+              <div className="text-blue-200 animate-pulse">
                 ✨ Une réponse se révèle...
               </div>
             )}
@@ -166,7 +166,7 @@ export default function ChatBot() {
                 <button
                   key={i}
                   onClick={() => sendMessage(q)}
-                  className="bg-zinc-800 text-white p-2 rounded text-sm hover:bg-purple-600"
+                  className="bg-white/10 text-white p-2 rounded text-sm hover:bg-blue-600 transition"
                 >
                   {q}
                 </button>
@@ -178,12 +178,13 @@ export default function ChatBot() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            className="w-full mt-2 p-2 rounded text-black"
+            className="w-full mt-2 p-2 rounded text-black outline-none"
+            placeholder="Écris ta question..."
           />
 
           <button
             onClick={() => sendMessage()}
-            className="w-full mt-2 bg-purple-600 p-2 text-white rounded"
+            className="w-full mt-2 bg-blue-600 p-2 text-white rounded hover:bg-blue-700 transition"
           >
             Envoyer
           </button>
