@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 type Message = {
   role: "user" | "ai";
   content: string;
   cta?: boolean;
+  pay?: boolean;
 };
 
 export default function ChatBot() {
@@ -16,15 +18,14 @@ export default function ChatBot() {
 
   const chatRef = useRef<HTMLDivElement>(null);
 
-  // 🎯 Questions spirituelles
   const quickQuestions = [
-    " Qu’est-ce que l’âme divine ?",
-    " Comment se connecter à son âme ?",
-    " Comment dévoiler les richesses cachées dans son âme ?",
-    " Quelle est la date et le lieu de l’évènement ?",
+    "Qu’est-ce que l’âme divine ?",
+    "Comment se connecter à son âme ?",
+    "Comment dévoiler les richesses cachées dans son âme ?",
+    "Quelle est la date et le lieu de l’évènement ?",
   ];
 
-  // 👋 Message immersif
+  // Message initial
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       setTimeout(() => {
@@ -32,14 +33,14 @@ export default function ChatBot() {
           {
             role: "ai",
             content:
-              "🙏 Shalom…\n\nCe n’est pas un hasard si tu es ici.\n\nChaque âme cherche une lumière.\n\nJe suis là pour t’accompagner… Que veux-tu découvrir ?",
+              "🙏 Chalom…\n\nCe n’est pas un hasard si tu es ici.\n\nChaque âme cherche une lumière.\n\nJe suis là pour t’accompagner… Que veux-tu découvrir ?",
           },
         ]);
       }, 500);
     }
   }, [isOpen]);
 
-  // 📜 Scroll auto
+  // Scroll auto
   useEffect(() => {
     chatRef.current?.scrollTo({
       top: chatRef.current.scrollHeight,
@@ -47,10 +48,9 @@ export default function ChatBot() {
     });
   }, [messages, loading]);
 
-  // 🧠 Détection inscription
+  // Détection intentions
   const wantsToRegister = (text: string) => {
     const msg = text.toLowerCase();
-
     return (
       ["inscription", "participer", "réserver", "venir"].some((k) =>
         msg.includes(k)
@@ -58,7 +58,14 @@ export default function ChatBot() {
     );
   };
 
-  // 🚀 Envoi message
+  const wantsToPay = (text: string) => {
+    const msg = text.toLowerCase();
+    return ["payer", "paiement", "prix"].some((k) =>
+      msg.includes(k)
+    );
+  };
+
+  // Envoi message
   const sendMessage = async (customMessage?: string) => {
     const userMsg = customMessage || message;
 
@@ -83,14 +90,13 @@ export default function ChatBot() {
 
       const data = await res.json();
 
-      const showCTA = wantsToRegister(userMsg);
-
       setMessages((prev) => [
         ...prev,
         {
           role: "ai",
           content: data.reply,
-          cta: showCTA,
+          cta: wantsToRegister(userMsg),
+          pay: wantsToPay(userMsg),
         },
       ]);
     } catch {
@@ -108,27 +114,43 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* 🔘 Bouton */}
+      {/* BOUTON */}
       {!isOpen && (
         <div className="fixed bottom-5 right-5">
           <button
             onClick={() => setIsOpen(true)}
             className="bg-blue-600 text-white px-4 py-3 rounded-full shadow-xl flex items-center gap-2 hover:bg-blue-700 transition"
           >
-            🤖 <span>Besoin de l’IA</span>
+            🤖 Besoin de l’IA
           </button>
         </div>
       )}
 
-      {/* 💬 Chat */}
+      {/* CHAT */}
       {isOpen && (
         <div className="fixed bottom-5 right-5 w-80 bg-gradient-to-br from-blue-900 to-sky-700 p-4 rounded-2xl shadow-xl border border-blue-400/30">
 
-          <div className="flex justify-between mb-3">
-            <h3 className="text-white font-semibold">Assistant spirituel</h3>
-            <button className="text-white" onClick={() => setIsOpen(false)}>✖</button>
+          {/* HEADER AVEC LOGO */}
+          <div className="flex justify-between items-center mb-3">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/B.jpeg"
+                alt="logo"
+                width={30}
+                height={30}
+                className="rounded-full"
+              />
+              <h3 className="text-white font-semibold">
+                Assistant spirituel
+              </h3>
+            </div>
+
+            <button className="text-white" onClick={() => setIsOpen(false)}>
+              ✖
+            </button>
           </div>
 
+          {/* MESSAGES */}
           <div ref={chatRef} className="h-60 overflow-y-auto space-y-3 pr-1">
             {messages.map((m, i) => (
               <div key={i}>
@@ -136,9 +158,10 @@ export default function ChatBot() {
                   {m.role === "user" ? "Toi" : "Guide"}
                 </div>
 
-                <div className="bg-white/10 backdrop-blur-md text-white p-2 rounded text-sm border border-white/10">
+                <div className="bg-white/10 text-white p-2 rounded text-sm border border-white/10 whitespace-pre-line">
                   {m.content}
 
+                  {/* CTA INSCRIPTION */}
                   {m.cta && (
                     <a
                       href="https://forms.gle/TLrMdkNxnTq9Z3Jg7"
@@ -147,6 +170,21 @@ export default function ChatBot() {
                     >
                       🎟 S’inscrire
                     </a>
+                  )}
+
+                  {/* PAIEMENT */}
+                  {m.pay && (
+                    <div className="flex gap-3 mt-2 justify-center">
+
+                      <a href="https://wa.me/22893669121?text=Paiement%20Flooz">
+                        <Image src="/flooz.png" alt="flooz" width={40} height={40}/>
+                      </a>
+
+                      <a href="https://wa.me/22893669121?text=Paiement%20TMoney">
+                        <Image src="/tmoney.png" alt="tmoney" width={40} height={40}/>
+                      </a>
+
+                    </div>
                   )}
                 </div>
               </div>
@@ -159,21 +197,24 @@ export default function ChatBot() {
             )}
           </div>
 
-          {/* Questions */}
-          {messages.length <= 1 && (
-            <div className="grid gap-2 mt-2">
-              {quickQuestions.map((q, i) => (
-                <button
-                  key={i}
-                  onClick={() => sendMessage(q)}
-                  className="bg-white/10 text-white p-2 rounded text-sm hover:bg-blue-600 transition"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* QUESTIONS APRÈS CHAQUE RÉPONSE */}
+          {!loading &&
+            messages.length > 0 &&
+            messages[messages.length - 1]?.role === "ai" && (
+              <div className="grid gap-2 mt-3">
+                {quickQuestions.map((q, i) => (
+                  <button
+                    key={i}
+                    onClick={() => sendMessage(q)}
+                    className="bg-white/10 text-white p-2 rounded text-sm hover:bg-blue-600 transition"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
 
+          {/* INPUT */}
           <input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
