@@ -29,7 +29,6 @@ export default function Home() {
 
         {/* HEADER */}
         <div className="absolute top-6 left-6 right-6 flex justify-between items-center z-20">
-
           <a href="https://forms.gle/TLrMdkNxnTq9Z3Jg7" target="_blank"
             className="px-6 py-2 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg">
             🎟 S'inscrire
@@ -42,16 +41,23 @@ export default function Home() {
           </a>
         </div>
 
-        {/* IMAGE */}
+        {/* IMAGE HERO */}
         <motion.div
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 6 }}
           className="absolute inset-0 -z-20 flex items-center justify-center bg-white"
         >
-          <Image src="/B.jpeg" alt="Conférence" fill className="object-contain" />
+          <Image
+            src="/B.jpeg"
+            alt="Conférence"
+            fill
+            priority
+            className="object-contain object-center"
+          />
         </motion.div>
 
+        {/* OVERLAY */}
         <div className="absolute inset-0 bg-black/60 -z-10"></div>
 
         {/* TITRE */}
@@ -86,7 +92,7 @@ export default function Home() {
 
       </section>
 
-      {/* CONTENU */}
+      {/* CONTENU GLOBAL */}
       <div className="bg-gradient-to-b from-blue-100 via-blue-300 to-blue-900 py-20 space-y-16">
 
         {/* CONFÉRENCIER */}
@@ -132,21 +138,43 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-6 text-white">Paiement</h2>
 
           <div className="bg-white p-6 rounded-2xl">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-6">
 
-              <a href="https://wa.me/22893669121?text=Paiement%20Flooz"
-                className="flex items-center justify-center gap-3 bg-blue-500 text-white py-3 rounded-xl">
+              {/* FLOOZ */}
+              <a 
+                href="https://wa.me/22893669121?text=Paiement%20Flooz"
+                target="_blank"
+                className="group relative overflow-hidden flex items-center justify-center gap-3 
+                bg-blue-500 text-white py-4 rounded-xl font-semibold 
+                transition-all duration-300 
+                hover:scale-105 hover:bg-blue-600 
+                hover:shadow-[0_0_25px_rgba(59,130,246,0.8)]"
+              >
+                <span className="absolute inset-0 bg-white/20 opacity-0 group-active:opacity-100 transition"></span>
                 <Image src="/flooz.png" alt="Flooz" width={28} height={28}/>
-                Flooz
+                Payer avec Flooz
               </a>
 
-              <a href="https://wa.me/22893669121?text=Paiement%20TMoney"
-                className="flex items-center justify-center gap-3 bg-yellow-400 text-black py-3 rounded-xl">
+              {/* TMONEY */}
+              <a 
+                href="https://wa.me/22893669121?text=Paiement%20TMoney"
+                target="_blank"
+                className="group relative overflow-hidden flex items-center justify-center gap-3 
+                bg-yellow-400 text-black py-4 rounded-xl font-semibold 
+                transition-all duration-300 
+                hover:scale-105 hover:bg-yellow-500 
+                hover:shadow-[0_0_25px_rgba(234,179,8,0.8)]"
+              >
+                <span className="absolute inset-0 bg-white/30 opacity-0 group-active:opacity-100 transition"></span>
                 <Image src="/tmoney.png" alt="TMoney" width={28} height={28}/>
-                TMoney
+                Payer avec TMoney
               </a>
 
             </div>
+
+            <p className="text-sm text-gray-500 mt-4">
+              Après paiement, envoyez la preuve sur WhatsApp
+            </p>
           </div>
         </section>
 
