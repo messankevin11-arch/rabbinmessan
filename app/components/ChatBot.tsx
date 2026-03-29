@@ -121,7 +121,7 @@ export default function ChatBot() {
             onClick={() => setIsOpen(true)}
             className="bg-blue-600 text-white px-4 py-3 rounded-full shadow-xl flex items-center gap-2 hover:bg-blue-700 transition"
           >
-            🤖 Besoin de l’IA
+            🤖 IA vous guide
           </button>
         </div>
       )}
