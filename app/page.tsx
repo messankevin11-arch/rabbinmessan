@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <main className="min-h-screen text-gray-900">
 
-      {/* HERO (INTOUCHÉ) */}
+      {/* HERO */}
       <section className="h-screen flex flex-col justify-center items-center text-center px-6 relative overflow-hidden">
 
         {/* HEADER */}
@@ -64,33 +64,33 @@ export default function Home() {
           />
         </motion.div>
 
-        {/* OVERLAY */}
-        <div className="absolute inset-0 bg-black/60 -z-10"></div>
+        {/* FILTRE BLEU EXACT */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#22c1dc]/95 via-[#22c1dc]/85 to-[#1d9fc4]/90 -z-10"></div>
 
         {/* TITRE */}
         <motion.h1 
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-6xl font-bold uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-300"
+          className="text-4xl md:text-6xl font-bold uppercase text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/80 drop-shadow-lg"
         >
           DÉVOILEMENT DE L’ÂME
         </motion.h1>
 
         {/* TEXTE */}
-        <p className="mt-4 text-gray-200 max-w-xl">
+        <p className="mt-4 text-white max-w-xl">
           Une rencontre exceptionnelle avec le  
           <span className="text-white font-semibold"> Grand Rabbin AVRAHAM MESSAN KOUDOSSOU</span>
         </p>
 
         {/* INFOS */}
-        <p className="mt-3 text-sm text-gray-300">
+        <p className="mt-3 text-sm text-white/90">
           📅 9 ET 10 MAI 2026 <br />
           ⏰ 19H À 21H30 <br />
           📍 Hôtel École Lébéné, Lomé
         </p>
 
         {/* PRIX */}
-        <p className="mt-2 text-lg font-semibold text-green-400">
+        <p className="mt-2 text-lg font-semibold text-green-300">
           Participation : 1 soir 8000 FCFA & 2 soirs 15000 FCFA
         </p>
 
@@ -103,11 +103,11 @@ export default function Home() {
 
       </section>
 
-      {/* CONTENU BLEU EAU */}
-      <div className="relative bg-gradient-to-b from-cyan-400 via-blue-500 to-blue-900 overflow-hidden">
+      {/* CONTENU BLEU CYAN */}
+      <div className="bg-[#22c1dc] relative">
 
-        {/* EFFET LUMIÈRE EAU */}
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px]"></div>
+        {/* EFFET LÉGER */}
+        <div className="absolute inset-0 bg-black/10"></div>
 
         {/* CONFÉRENCIER */}
         <motion.section 
@@ -228,8 +228,13 @@ export default function Home() {
       <ChatBot />
 
       {/* FOOTER */}
-      <footer className="py-10 text-center text-gray-600 text-sm border-t bg-white">
-        © {new Date().getFullYear()} Conférence Spirituelle - Tous droits réservés
+      <footer className="py-10 text-center text-gray-400 text-sm bg-black border-t border-white/10">
+        <p className="mb-2">
+          © {new Date().getFullYear()} Conférence Spirituelle
+        </p>
+        <p className="text-gray-500 text-xs">
+          Tous droits réservés • Conçu avec passion
+        </p>
       </footer>
 
     </main>
