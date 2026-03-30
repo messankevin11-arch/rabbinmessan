@@ -13,8 +13,7 @@ export default function Home() {
     const interval = setInterval(() => {
       setPlaces((prev) => {
         if (prev <= 5) return prev;
-        const variation = Math.random() > 0.5 ? -1 : 0;
-        return prev + variation;
+        return prev - (Math.random() > 0.5 ? 1 : 0);
       });
     }, 40000);
 
@@ -24,7 +23,7 @@ export default function Home() {
   return (
     <main className="min-h-screen text-gray-900">
 
-      {/* HERO */}
+      {/* HERO (INTOUCHÉ) */}
       <section className="h-screen flex flex-col justify-center items-center text-center px-6 relative overflow-hidden">
 
         {/* HEADER */}
@@ -104,90 +103,95 @@ export default function Home() {
 
       </section>
 
-      {/* CONTENU AVEC DEGRADÉ */}
-      <div className="bg-gradient-to-b from-blue-100 via-blue-300 to-blue-900">
+      {/* CONTENU BLEU EAU */}
+      <div className="relative bg-gradient-to-b from-cyan-400 via-blue-500 to-blue-900 overflow-hidden">
+
+        {/* EFFET LUMIÈRE EAU */}
+        <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px]"></div>
 
         {/* CONFÉRENCIER */}
-        <section className="py-24 px-6 text-center border-b border-white/20">
-          <h2 className="text-3xl font-bold mb-12 text-blue-900">
+        <motion.section 
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="py-24 px-6 text-center border-b border-white/20 relative z-10"
+        >
+          <h2 className="text-3xl font-bold mb-12 text-white">
             Le Conférencier
           </h2>
 
           <div className="flex flex-col items-center">
 
-            {/* IMAGE OPTIMISÉE */}
-            <div className="w-48 h-48 rounded-full mb-6 overflow-hidden shadow-2xl border-4 border-white hover:scale-105 transition duration-500 relative">
+            <div className="w-48 h-48 rounded-full mb-6 overflow-hidden shadow-2xl border-4 border-white hover:scale-110 transition duration-500 relative">
               <Image 
                 src="/A.jpeg"
                 alt="AVRAHAM MESSAN KOUDOSSOU"
                 fill
-                className="object-cover object-center"
+                className="object-cover"
               />
             </div>
 
-            <h3 className="text-xl font-semibold mb-3 text-blue-900">
+            <h3 className="text-xl font-semibold mb-3 text-white">
               AVRAHAM MESSAN KOUDOSSOU
             </h3>
 
-            <p className="text-gray-800 max-w-xl mb-6">
-              Leader spirituel reconnu, il partage des enseignements puissants.
+            <p className="text-white/90 max-w-xl mb-6">
+              Leader spirituel reconnu, il partage des enseignements puissants et transformateurs.
             </p>
 
             <a href="/references-rabbin.pdf" target="_blank"
-              className="px-8 py-3 rounded-xl border bg-white hover:bg-blue-100 transition shadow-lg">
+              className="px-8 py-3 rounded-xl bg-white text-blue-900 hover:bg-blue-100 transition shadow-lg hover:scale-105">
               📖 Télécharger les références
             </a>
 
           </div>
-        </section>
+        </motion.section>
 
         {/* COURS */}
-        <section className="py-24 px-6 text-center border-b border-white/20">
-          <h2 className="text-3xl font-bold mb-6 text-blue-900">
+        <motion.section 
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="py-24 px-6 text-center border-b border-white/20 relative z-10"
+        >
+          <h2 className="text-3xl font-bold mb-6 text-white">
             📚 Enseignements du Rabbin
           </h2>
 
-          <p className="text-gray-800 mb-8">
+          <p className="text-white/90 mb-8">
             Accédez aux enseignements spirituels complets
           </p>
 
           <a href="/cours"
-            className="px-10 py-4 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 hover:scale-105 transition shadow-lg">
+            className="px-10 py-4 bg-white text-blue-900 rounded-xl font-semibold hover:scale-110 transition shadow-lg">
             Voir les cours
           </a>
-        </section>
+        </motion.section>
 
         {/* PAIEMENT */}
-        <section className="py-24 text-center border-b border-white/20">
+        <motion.section 
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="py-24 text-center border-b border-white/20 relative z-10"
+        >
 
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Image src="/paiement.jpg" alt="Paiement" width={40} height={40}/>
-            <h2 className="text-3xl font-bold text-blue-900">Paiement</h2>
-          </div>
+          <h2 className="text-3xl font-bold text-white mb-6">Paiement</h2>
 
-          <p className="text-gray-800 mb-6">
-            Choisissez votre moyen de paiement
-          </p>
-
-          <div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-xl">
+          <div className="max-w-md mx-auto bg-white/20 backdrop-blur-xl p-6 rounded-2xl shadow-2xl border border-white/30">
 
             <div className="flex flex-col gap-4">
 
-              {/* FLOOZ */}
               <a 
                 href="https://wa.me/22893669121?text=Paiement%20Flooz"
                 target="_blank"
-                className="flex items-center justify-center gap-3 bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 hover:scale-110 transition shadow-md hover:shadow-xl"
+                className="flex items-center justify-center gap-3 bg-blue-500 text-white py-3 rounded-xl font-semibold hover:scale-110 transition shadow-lg"
               >
                 <Image src="/flooz.png" alt="Flooz" width={28} height={28}/>
                 Payer avec Flooz
               </a>
 
-              {/* TMONEY */}
               <a 
                 href="https://wa.me/22893669121?text=Paiement%20TMoney"
                 target="_blank"
-                className="flex items-center justify-center gap-3 bg-yellow-400 text-black py-3 rounded-xl font-semibold hover:bg-yellow-500 hover:scale-110 transition shadow-md hover:shadow-xl"
+                className="flex items-center justify-center gap-3 bg-yellow-400 text-black py-3 rounded-xl font-semibold hover:scale-110 transition shadow-lg"
               >
                 <Image src="/tmoney.png" alt="TMoney" width={28} height={28}/>
                 Payer avec TMoney
@@ -195,20 +199,20 @@ export default function Home() {
 
             </div>
 
-            <p className="text-sm text-gray-500 mt-4">
+            <p className="text-sm text-white/80 mt-4">
               Après paiement, envoyez la preuve sur WhatsApp
             </p>
           </div>
-        </section>
+        </motion.section>
 
         {/* CTA */}
-        <section className="py-24 text-center">
+        <section className="py-24 text-center relative z-10">
           <h2 className="text-3xl font-bold mb-6 text-white">
             Réserve ta place maintenant
           </h2>
 
           <a href="https://forms.gle/TLrMdkNxnTq9Z3Jg7" target="_blank"
-            className="px-10 py-4 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 hover:scale-105 transition shadow-lg">
+            className="px-10 py-4 bg-white text-blue-900 rounded-xl font-semibold hover:scale-110 transition shadow-xl">
             🎟 Je m’inscris
           </a>
         </section>
